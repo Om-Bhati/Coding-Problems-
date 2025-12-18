@@ -7,7 +7,25 @@ using namespace std ;
 class Solution {
 public:
     long long maxProfit(vector<int>& prices, vector<int>& strategy, int k) {
-        
+        ll without_mod = 0 ;
+        // ll maxPro = 0 ;
+        int n = prices.size() ;
+        vector<ll> pS(n+1,0) , pPrice(n+1,0) ;
+        for (int i=0 ; i<n ; i++) {
+            ll cur = (1LL * prices[i] * strategy[i]) ;
+            without_mod += cur ;
+            pS[i+1] = pS[i] + cur ;
+            pPrice[i+1] = pPrice[i] + prices[i] ;
+        }
+        // maxPro = max(maxPro , without_mod) ;
+        // i can precompute the rest by just storing it in prefix sum
+        ll del = 0 ;
+        for (int i=0 ; i<=(n-k) ; i++) {
+            int j=i+k-1 , mid = i+(k/2) ;
+            ll d = (pPrice[j+1] - pPrice[mid]) - (pS[j+1] - pS[i]);
+            del = max(del , d) ;
+        }
+        return del + without_mod ;
     }
 };
 
